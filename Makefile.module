@@ -1,10 +1,11 @@
+
 BASEFLAGS = -g3 -O$(OPT)
 BASEFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 BASEFLAGS += -Wall -Wcast-align -Wcast-qual -Wextra -Wshadow
 BASEFLAGS += -Wpointer-arith -Wswitch -Wredundant-decls -Wreturn-type -Wunused
 BASEFLAGS += -Wa,-adhlns=$(subst $(suffix $<),.lst,$<)
 BASEFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
-BASEFLAGS += -ffunction-sections -funit-at-a-time -mcall-prologues -ffreestanding
+BASEFLAGS += -ffunction-sections -funit-at-a-time -mcall-prologues
 BASEFLAGS += -fmerge-all-constants -ffast-math -funsafe-loop-optimizations #Dangerous?
 
 CONLYFLAGS = -Wstrict-prototypes -Wimplicit
@@ -21,6 +22,7 @@ OBJCOPY = $(PREFIX)-objcopy
 NM = $(PREFIX)-nm
 SIZE = getsize.py
 
+EXTRAINCDIRS += $(SYSTEMDIR)
 
 COBJ      = $(SRC:.c=.o)
 AOBJ      = $(ASRC:.S=.o)
@@ -41,6 +43,7 @@ build: debug/main.elf debug/main.lss
 
 prepare:
 	@mkdir -p debug
+
 .PHONY: sizebefore
 sizebefore:
 	@if [ -f debug/main.elf ]; then cp debug/main.elf debug/main.old; fi
