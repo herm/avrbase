@@ -1,14 +1,3 @@
-MCU = atmega8
-Q =
-# # Q = @
-OPT = s
-
-SRC = 
-CPPSRC = main.cpp test.cpp
-ASRC =
-
-PROGRAMMER = lm3s811
-###################################################################
 BASEFLAGS = -g3 -O$(OPT)
 BASEFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 BASEFLAGS += -Wall -Wcast-align -Wcast-qual -Wextra -Wshadow
@@ -20,7 +9,7 @@ BASEFLAGS += -fmerge-all-constants -ffast-math -funsafe-loop-optimizations #Dang
 
 CONLYFLAGS = -Wstrict-prototypes -Wimplicit
 CPPONLYFLAGS = -fno-exceptions -fno-default-inline -finline-limit=100 -fno-threadsafe-statics
-ASFLAGS = $(ADEFS) -Wa,-adhlns=$(<:.S=.lst),-g3
+ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-g3
 
 
 ###################################################################
@@ -35,7 +24,7 @@ SIZE = getsize.py
 
 COBJ      = $(SRC:.c=.o)
 AOBJ      = $(ASRC:.S=.o)
-CPPOBJ    = $(CPPSRC:.cpp=.o) 
+CPPOBJ    = $(CPPSRC:.cpp=.o)
 
 # MD = create dependency rules + object file
 # MF = dependency output file

@@ -1,0 +1,12 @@
+MCU = atmega8
+Q = @
+OPT = s
+
+SRC = 
+CPPSRC = main.cpp
+ASRC =
+
+PROGRAMMER = lm3s811
+###################################################################
+SYSTEMDIR = avrbase
+include $(SYSTEMDIR)/Makefile.avr
