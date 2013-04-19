@@ -9,4 +9,4 @@ ASRC =
 PROGRAMMER = lm3s811
 ###################################################################
 SYSTEMDIR = avrbase
-include $(SYSTEMDIR)/Makefile.avr
+include $(SYSTEMDIR)/Makefile.module
