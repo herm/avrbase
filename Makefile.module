@@ -53,7 +53,7 @@ sizeafter:
 
 program:
 	@if ! avrdude -c lm3s811 -p $(MCU) -U flash:v:debug/main.elf -q -q; then \
-		avrdude -c lm3s811 -p $(MCU) -U flash:w:debug/main.elf; \
+		avrdude -c lm3s811 -p $(MCU) -U flash:w:debug/main.elf -y; \
 	else \
 		echo "Already programmed."; \
 	fi
