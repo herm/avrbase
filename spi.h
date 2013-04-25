@@ -5,12 +5,22 @@
 #include <avr/io.h>
 #include "config.h"
 
+#if defined (__AVR_ATmega16__)
+#define spi_DDR   DDRB
+#define spi_SS    PB4
+#define spi_MOSI  PB5
+#define spi_MISO  PB6
+#define spi_SCK   PB7
+#else
+#warning "Unknown MCU"
+#endif
+
 class SPI
 {
 public:
     SPI()
     {
-        DDRspi = _BV(mosi) | _BV(sck);
+        spi_DDR = _BV(spi_MOSI) | _BV(spi_SCK) | _BV(spi_SS);
         format();
         frequency();
     }
