@@ -52,6 +52,7 @@ sizeafter:
 	@$(SIZE) debug/main.elf
 
 program:
+	@echo avrdude -c lm3s811 -p $(MCU) -U flash:v:debug/main.elf -q -q
 	@if ! avrdude -c lm3s811 -p $(MCU) -U flash:v:debug/main.elf -q -q; then \
 		avrdude -c lm3s811 -p $(MCU) -U flash:w:debug/main.elf -y; \
 	else \
