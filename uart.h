@@ -2,26 +2,25 @@
 #define UART_H
 
 #include <avr/io.h>
+#include "config.h"
 #include "utils.h"
 
-#ifndef DEFAULT_BAUD
-#define DEFAULT_BAUD 9600
-#endif
 
 class Serial
 {
 public:
     Serial(int baudrate)
     {
-        if (baudrate) baud(baudrate);
+        baud(baudrate);
     }
 
     force_inline void baud(int baudrate)
     {
         /* Rounding! */
-        uint16_t ubbr_value = (MCLK+baudrate*8)/16/baudrate - 1;
+        uint16_t ubbr_value = (MCLK+4l*baudrate)/(8l*baudrate) - 1;
         UBRRH = ubbr_value >> 8;
         UBRRL = ubbr_value;
+        UCSRA = _BV(U2X);
         UCSRB = _BV(RXEN) | _BV(TXEN);
         UCSRC = _BV(URSEL) | _BV(UCSZ0) |_BV(UCSZ1);
     }
@@ -32,9 +31,9 @@ public:
         UDR = c;
     }
 
-    void print(uint8_t *str)
+    void print(const char *str)
     {
-        while (str) { putc(*str++); }
+        while (*str) { putc(*str++); }
     }
 
     uint8_t getc()
