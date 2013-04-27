@@ -3,4 +3,9 @@
 
 #define MCLK 8000000l
 
+// Always use & to combine fuses
+#define fuses_low  LFUSE_DEFAULT
+#define fuses_high HFUSE_DEFAULT
+#define fuses_ext  EFUSE_DEFAULT
+
 #endif

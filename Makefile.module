@@ -1,6 +1,8 @@
+CPPSRC += $(SYSTEMDIR)/pin.cpp
+SRC += $(SYSTEMDIR)/fuses.c
 
 BASEFLAGS = -g3 -O$(OPT)
-BASEFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+BASEFLAGS += -funsigned-char -funsigned-bitfields -fshort-enums #-fpack-struct
 BASEFLAGS += -Wall -Wcast-align -Wcast-qual -Wextra -Wshadow
 BASEFLAGS += -Wpointer-arith -Wswitch -Wredundant-decls -Wreturn-type -Wunused
 BASEFLAGS += -Wa,-adhlns=$(subst $(suffix $<),.lst,$<)
@@ -38,26 +40,34 @@ CXXFLAGS = $(BASEFLAGS) $(CPPONLYFLAGS)
 ASFLAGS += -mcpu=$(MCU) -I. -x assembler-with-cpp
 LDFLAGS = -lc -lgcc -funit-at-a-time -Wl,--gc-sections -Wl,--relax
 
+.PHONY: all build prepare sizebefore sizeafter program verify_fuses mmap clean
 all: prepare sizebefore build sizeafter mmap
 build: debug/main.elf debug/main.lss
 
 prepare:
 	@mkdir -p debug
 
-.PHONY: sizebefore
 sizebefore:
 	@if [ -f debug/main.elf ]; then cp debug/main.elf debug/main.old; fi
 
 sizeafter:
 	@$(SIZE) debug/main.elf
 
-program:
+program: verify_fuses
 	@echo avrdude -c lm3s811 -p $(MCU) -U flash:v:debug/main.elf -q -q
 	@if ! avrdude -c lm3s811 -p $(MCU) -U flash:v:debug/main.elf -q -q; then \
 		avrdude -c lm3s811 -p $(MCU) -U flash:w:debug/main.elf -y; \
 	else \
 		echo "Already programmed."; \
 	fi
+
+verify_fuses:
+	@if grep 'fuses_' config.avrbase.h | grep '|'  -q; then \
+	    echo "ERROR: Use & instead of | to combine fuses."; \
+	    false;\
+	fi
+	@avrdude -p atmega16 -c lm3s811 -U lfuse:v:debug/main.elf -U hfuse:v:debug/main.elf -q -q
+
 
 .SECONDARY : debug/main.elf
 .PRECIOUS : $(AOBJ) $(COBJ) $(CPPOBJ)
@@ -83,9 +93,10 @@ mmap: debug/main.elf
 	@cat debug/mmap.loc | egrep -i "\ t\ " >  debug/loc_map || true
 	@cat debug/mmap.loc | egrep -i "\ d\ " >> debug/loc_map || true
 	@cat debug/mmap.loc | egrep -i "\ b\ " >> debug/loc_map || true
+	@rm debug/mmap.loc
 
 # Include the dependency files.
 -include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 
 clean:
-	rm -f debug/main.elf $(COBJ) $(CPPOBJ) $(AOBJ) $(ASRC:.S=.lst) $(SRC:.c=.lst) $(CPPSRC:.cpp=.lst) .dep/* *~
+	rm -f debug/main.elf debug/size_map debug/loc_map $(COBJ) $(CPPOBJ) $(AOBJ) $(ASRC:.S=.lst) $(SRC:.c=.lst) $(CPPSRC:.cpp=.lst) .dep/* *~
