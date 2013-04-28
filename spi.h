@@ -5,7 +5,14 @@
 #include <avr/io.h>
 #include "config.h"
 
-#if defined (__AVR_ATmega16__)
+#if defined (__AVR_ATmega8__)
+/* SPI */
+#define spi_SS   PB2
+#define spi_MOSI PB3
+#define spi_MISO PB4
+#define spi_SCK  PB5
+#define DDRspi   DDRB
+#elif defined (__AVR_ATmega16__)
 #define spi_DDR   DDRB
 #define spi_SS    PB4
 #define spi_MOSI  PB5
