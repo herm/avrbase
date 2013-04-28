@@ -9,12 +9,12 @@
 class Serial
 {
 public:
-    Serial(int baudrate)
+    Serial(uint32_t baudrate)
     {
         baud(baudrate);
     }
 
-    force_inline void baud(int baudrate)
+    force_inline void baud(uint32_t baudrate)
     {
         /* Rounding! */
         uint16_t ubbr_value = (MCLK+4l*baudrate)/(8l*baudrate) - 1;
@@ -40,6 +40,12 @@ public:
     {
         while (!(UCSRA & _BV(RXC)));
         return UDR;
+    }
+
+    void newline()
+    {
+        putc('\r');
+        putc('\n');
     }
 
 };
