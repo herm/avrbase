@@ -14,6 +14,10 @@ CONLYFLAGS = -Wstrict-prototypes -Wimplicit
 CPPONLYFLAGS = -fno-exceptions -fno-default-inline -finline-limit=100 -fno-threadsafe-statics
 ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-g3
 
+ifeq ($(strip $(DEBUG)),True)
+CPPSRC += $(SYSTEMDIR)/debug.cpp
+endif
+
 
 ###################################################################
 PREFIX = avr
@@ -98,5 +102,5 @@ mmap: debug/main.elf
 # Include the dependency files.
 -include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 
-clean:
+clean: sizebefore
 	rm -f debug/main.elf debug/size_map debug/loc_map $(COBJ) $(CPPOBJ) $(AOBJ) $(ASRC:.S=.lst) $(SRC:.c=.lst) $(CPPSRC:.cpp=.lst) .dep/* *~
