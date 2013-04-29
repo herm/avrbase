@@ -1,23 +1,24 @@
 #include "pin.h"
+
 void DigitalInOut::operator =(uint8_t value) const
 {
     if (mode_ & _Output)
     {
         if (value)
-            *port_ |= pin_;
+            port_->PORT |= pin_;
         else
-            *port_ &= ~pin_;
+            port_->PORT &= ~pin_;
     } else if (mode_ == OpenDrain)
     {
         if (value)
         {
             // 1 = pullup, input
-            *(port_ + DDR_OFFSET) &= ~pin_; //input
-            *port_ = 1; //pullup
+            port_->DDR &= ~pin_; //input
+            port_->PORT |= pin_; //pullup
         } else {
             // 0 = output, 0
-            *port_ = 0;
-            *(port_ + DDR_OFFSET) |= pin_;
+            port_->PORT &= ~pin_;
+            port_->DDR |= pin_;
         }
     }
 }
