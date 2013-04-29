@@ -11,29 +11,27 @@ static void debug_hex(uint8_t x)
     if (tmp <= 9) debug_uart.putc(tmp+'0'); else debug_uart.putc(tmp-10+'A');
 }
 
-static void debug_write(const uint8_t *val, long len, uint8_t bytes)
+static void debug_write(const uint8_t *val, uint8_t len, uint8_t bytes)
 {
-    uint8_t count = 0;
-    const uint8_t *end = val + len;
-    while (val != end)
+    for (uint8_t i=0; i < len; i++)
     {
-        debug_hex(*val++);
-        if (++count == bytes) {
-            count = 0;
-            debug_uart.putc(' ');
+        for (int8_t b=bytes - 1; b>=0; b--)
+        {
+            debug_hex(val[i+b]);
         }
+        debug_uart.putc(' ');
     }
     debug_uart.newline();
 }
 
 void dbg_write_u32(const uint32_t *val, uint8_t len)
 {
-    debug_write((const uint8_t*)val, len*4, 4);
+    debug_write((const uint8_t*)val, len, 4);
 }
 
 void dbg_write_u16(const uint16_t *val, uint8_t len)
 {
-    debug_write((const uint8_t*)val, len*2, 2);
+    debug_write((const uint8_t*)val, len, 2);
 }
 
 void dbg_write_u8(const uint8_t *val, uint8_t len)
@@ -41,10 +39,10 @@ void dbg_write_u8(const uint8_t *val, uint8_t len)
     debug_write(val, len, 1);
 }
 
-void dbg_write_str(const char *msg)
+void dbg_write_str(const char *msg, bool newline)
 {
     debug_uart.print(msg);
-    debug_uart.newline();
+    if (newline) debug_uart.newline();
 }
 
 void dbg_write_char(char msg)
