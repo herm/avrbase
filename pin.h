@@ -6,13 +6,6 @@
 #include "utils.h"
 #include "config.h"
 
-#if ! defined (__AVR_ATmega16__)
-#warning Check PIN_OFFSET and DDR_OFFSET definitions for this MCU
-#endif
-
-#define PIN_OFFSET (-2)
-#define DDR_OFFSET (-1)
-
 typedef enum {
     PullNone,
     PullUp,
