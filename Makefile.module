@@ -9,6 +9,7 @@ BASEFLAGS += -Wa,-adhlns=$(subst $(suffix $<),.lst,$<)
 BASEFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
 BASEFLAGS += -ffunction-sections -funit-at-a-time -mcall-prologues
 BASEFLAGS += -fmerge-all-constants -ffast-math -funsafe-loop-optimizations #Dangerous?
+BASEFLAGS += -lm
 
 CONLYFLAGS = -Wstrict-prototypes -Wimplicit
 CPPONLYFLAGS = -fno-exceptions -fno-default-inline -finline-limit=100 -fno-threadsafe-statics
