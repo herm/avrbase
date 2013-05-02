@@ -61,10 +61,10 @@ void dbg_write_decimal(int32_t val)
     debug_uart.newline();
 }
 
-void dbg_write_float(double f)
+void dbg_write_float(double f, bool newline)
 {
     char buffer[20];
     dtostrf(f, 0, 2, buffer);
     debug_uart.print(buffer);
-    debug_uart.newline();
+    if (newline) debug_uart.newline(); else debug_uart.putc(' ');
 }
