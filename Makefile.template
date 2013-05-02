@@ -11,4 +11,5 @@ PROGRAMMER = lm3s811
 DEBUG = True
 ###################################################################
 SYSTEMDIR = avrbase
+include Makefile.modules
 include $(SYSTEMDIR)/Makefile.module
