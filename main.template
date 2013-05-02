@@ -1,5 +1,13 @@
-#include <avr/io.h>
+#include "debug.h"
+#include "config.h"
+#include "irq.h"
+#include "pin.h"
 
 int main()
 {
+    enableIRQ();
+    while (1)
+    {
+
+    }
 }
