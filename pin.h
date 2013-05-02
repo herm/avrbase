@@ -21,7 +21,7 @@ public:
         pin_(_BV(pin)),
         port_(&port)
     {
-        port_->DDR |= pin_;
+        enable();
     }
 
     void operator=(uint8_t value) const
@@ -36,6 +36,19 @@ public:
     {
         return port_->PORT & pin_;
     }
+
+    force_inline void disable() const
+    {
+        port_->DDR &= ~pin_;
+        port_->PORT &= ~pin_; //Disable pullup
+    }
+
+    force_inline void enable() const
+    {
+        port_->DDR |= pin_;
+    }
+
+    uint8_t bitmask() const { return pin_;}
 protected:
     const uint8_t pin_;
     avr_port *port_;
