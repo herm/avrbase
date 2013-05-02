@@ -1,5 +1,6 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
+#include <avr/io.h>
 #include "config.avrbase.h"
 
 typedef volatile unsigned char  AVR_REG8  __attribute__ (( aligned (1)));
