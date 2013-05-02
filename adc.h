@@ -1,15 +1,21 @@
 #ifndef ADC_H
 #define ADC_H
 
+#include "utils.h"
+
 class AnalogIn
 {
 public:
-    AnalogIn(uint8_t channel) : channel_(channel| _BV(ADLAR)) { }
+    AnalogIn(uint8_t channel) : channel_(channel/*| _BV(ADLAR)*/ |_BV(REFS0)) { }
+    force_inline operator int16_t() {
+        return read_s16();
+    }
+
     int16_t read_s16()
     {
         ADMUX = channel_;
         /* ADC operation frequency: 50kHz - 200kHz */
-        unsigned factor = MCLK / 100000;
+        unsigned factor = MCLK / 200000;
         uint8_t divider = 0;
         if (factor < 2) {
             divider = 0;
@@ -38,6 +44,8 @@ public:
         return ADC;
     }
 
+    force_inline void disable() {}
+    force_inline void enable() {}
 private:
     uint8_t channel_;
 };
