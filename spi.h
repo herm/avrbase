@@ -7,11 +7,11 @@
 
 #if defined (__AVR_ATmega8__)
 /* SPI */
-#define spi_SS   PB2
-#define spi_MOSI PB3
-#define spi_MISO PB4
-#define spi_SCK  PB5
-#define DDRspi   DDRB
+#define spi_SS    PB2
+#define spi_MOSI  PB3
+#define spi_MISO  PB4
+#define spi_SCK   PB5
+#define spi_DDR   DDRB
 #elif defined (__AVR_ATmega16__)
 #define spi_DDR   DDRB
 #define spi_SS    PB4
