@@ -1,4 +1,4 @@
-CPPSRC += $(SYSTEMDIR)/pin.cpp
+CPPSRC += $(SYSTEMDIR)/pin.cpp $(SYSTEMDIR)/timer.cpp $(SYSTEMDIR)/adc.cpp
 SRC += $(SYSTEMDIR)/fuses.c
 
 BASEFLAGS = -g3 -O$(OPT)
@@ -71,7 +71,7 @@ verify_fuses:
 	    echo "ERROR: Use & instead of | to combine fuses."; \
 	    false;\
 	fi
-	@avrdude -p atmega16 -c lm3s811 -U lfuse:v:debug/main.elf -U hfuse:v:debug/main.elf -q -q
+	@avrdude -p $(MCU) -c lm3s811 -U lfuse:v:debug/main.elf -U hfuse:v:debug/main.elf -q -q
 
 
 .SECONDARY : debug/main.elf
